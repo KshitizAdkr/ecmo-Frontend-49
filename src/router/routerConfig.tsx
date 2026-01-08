@@ -3,6 +3,8 @@ import LoginPage from "../pages/auth/LoginPage";
 import registerPage from "../pages/auth/registerPage";
 import ErrorPage from "../pages/auth/errorPage"; 
 import AuthLayout from "../pages/layout/AuthLayout";
+import UserLayout from "../pages/layout/UserLayout";
+import UserDashboard from "../pages/dashboard/UserDashboard";
 
 
 const router = createBrowserRouter([
@@ -10,6 +12,11 @@ const router = createBrowserRouter([
     { path : "/", element: <AuthLayout />, children: [
         { index: true, element: <LoginPage />},
         { path: "register", Component: registerPage},
+    ]
+},
+{
+    path: "/admin", element: <UserLayout />, children: [
+        { index: true, Component: UserDashboard}
     ]
 },
     { 
@@ -22,10 +29,7 @@ const router = createBrowserRouter([
 
 
 export default function routerConfig() {
-    return(
-        <>
+    return <>
         <RouterProvider router={router} />
-
         </>
-    )
 }

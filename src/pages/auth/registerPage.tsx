@@ -1,4 +1,4 @@
-import { PageHeadingWithSubtitle } from "../../components/page-heading/pageHeading"; 
+import { PageHeadingWithSubtitle } from "../../components/page-heading/pageHeading";
 
 export default function registerPage() {
   return (
@@ -7,7 +7,9 @@ export default function registerPage() {
         <div className="w-full md:w-2xl lg:w-3xl xl:w-4xl shadow-2xl bg-stone-200/75 rounded-tl-lg rounded-tr-lg rounded-br-lg rounded-bl-lg p-5">
           <PageHeadingWithSubtitle title="register From here">
             Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          </PageHeadingWithSubtitle>
+          </PageHeadingWithSubtitle> 
+
+          Register Form
 
           <div className="w-full flex flex-col gap-5">
             <span className="flex items-center">

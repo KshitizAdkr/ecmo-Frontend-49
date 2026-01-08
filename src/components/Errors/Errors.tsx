@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { PageHeadingWithSubtitle } from "../page-heading/pageHeading";
 
 export const NotFound = ({
@@ -26,12 +27,12 @@ export const NotFound = ({
             </span>
 
             <div className="flex w-full justify-center">
-              <a
-                href={redirectLink}
+              <Link
+                to={redirectLink}
                 className="cursor-pointer hover:underline transition hover:scale-96 w-full p-2 rounded-full"
               >
                 {redirectTxt}
-              </a>
+              </ Link>
             </div>
           </div>
     </>
