@@ -1,4 +1,4 @@
-import { NotFound } from "../../components/Errors/Errors"
+import { NotFound } from "../components/Errors/Errors";
 
 export default function ErrorPage({code, redirectLink='', redirectTxt=''}: Readonly<{code: number, redirectLink?: string, redirectTxt?: string}>) {
   return (

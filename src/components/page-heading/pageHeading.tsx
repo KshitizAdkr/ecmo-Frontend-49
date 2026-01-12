@@ -14,7 +14,7 @@ export const PageHeadingTitle = ({title, className=''}: Readonly<{title: ReactNo
 export const PageHeadingSubtitle = ({ children }: Readonly<{children : ReactNode}> ) => {
     return (
         <>
-            <span className="font-sm font-black italic font-[fantasy]">
+            <span className="font-sm font-black italic font-[Papyrus]">
                 {children}
             </span>
         </>

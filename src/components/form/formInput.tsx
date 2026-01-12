@@ -1,24 +1,69 @@
-export const FormInput = ({name, type, placeholder}: Readonly<{name: string, type?: string, placeholder?: string}>) => {
+import { Controller, useController, type FieldValues } from "react-hook-form";
+import { type IInputprops, type IFormInputProps, type IGeneralInput } from "./form.contract";
+
+export const FormInputControl = <T extends FieldValues>({ name, type, placeholder, control, errMsg=''}: Readonly<IInputprops<T>>) => {
+    const {field} = useController({
+        name: name,
+        control: control,
+    })
     return(
         <>
             <input 
                 type= {type}  
-                id= {name}
-                name= {name}
-                placeholder= {placeholder} 
+                placeholder= {placeholder}
+                {...field} 
+                className={`w-full p-2 rounded-lg border
+                    ${errMsg ? 'border-red-500' : 'border-gray-600'}
+                    `}
+            />
+            <span className="mt-1 text-sm text-red-500">{errMsg}</span>
+        </>
+    );
+};
+
+export const FormInput = ({name, type, placeholder, handler}: Readonly<IFormInputProps>) => {
+    const{field} = useController({
+        name: name,
+        control: handler,
+    })
+    return(
+        <>
+            <input 
+                type= {type}  
+                {...handler(name)}
+                placeholder= {placeholder}
+                {...field} 
                 className="w-full p-2 rounded-lg border border-gray-600"
             />
         </>
     );
 };
 
-export const EmailInput = ({name, placeholder}: Readonly<{name: string, placeholder?: string}>) => {
+export const FormInputControl1 = ({name, type, placeholder, handler}: Readonly<IFormInputProps>) => {
+    const{field} = useController({
+        name: name,
+        control: handler,
+    })
+    return(
+        <>
+            <input 
+                type= {type}  
+                {...handler(name)}
+                placeholder= {placeholder}
+                {...field} 
+                className="w-full p-2 rounded-lg border border-gray-600"
+            />
+        </>
+    );
+};
+
+export const EmailInput = ({name, placeholder, handler}: Readonly<IGeneralInput>) => {
     return(
         <>
             <input 
                 type="email"  
                 id= {name}
-                name= {name}
+                {...handler(name)}
                 placeholder= {placeholder}  
                 className="w-full p-2 rounded-lg border border-gray-600"
             />
@@ -26,16 +71,25 @@ export const EmailInput = ({name, placeholder}: Readonly<{name: string, placehol
     )
 }
 
-export const PasswordInput = ({name, placeholder}: Readonly<{name: string, placeholder?: string}>) => {
+export const EmailInputControl = ({name, placeholder, handler}: Readonly<IGeneralInput>) => {
     return(
         <>
-            <input 
-                type="password"  
-                id= {name}
-                name= {name}
-                placeholder= {placeholder}  
-                className="w-full p-2 rounded-lg border border-gray-600"
-            />
+            <Controller
+                name={name}
+                control={handler}
+                render={(field) => {
+                    return(
+                        <>
+                            <input 
+                                type="email"
+                                {...field}
+                                placeholder= {placeholder}  
+                                className="w-full p-2 rounded-lg border border-gray-600"
+                            />              
+                        </>
+                    ) 
+                }}
+            ></Controller>
         </>
     )
 }

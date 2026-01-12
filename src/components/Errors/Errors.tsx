@@ -11,10 +11,10 @@ export const NotFound = ({
     titleClass="text-red-800! underline text-center mb-5"
     title= "NotFound!!!"
     >
-        <p className="text-red-700 tetx-center">
+        <p className="text-red-700 text-center">
             The page you are looking for doesn't exist anymore!
         </p>
-        <p className="text-red-700 tetx-center">
+        <p className="text-red-700 text-center">
             Please go back to the homepage from button below.
         </p>
     </PageHeadingWithSubtitle>
@@ -26,10 +26,10 @@ export const NotFound = ({
               <span className="h-px flex-1 bg-gray-300"></span>
             </span>
 
-            <div className="flex w-full justify-center">
+            <div className="flex w-full justify-center text-center">
               <Link
                 to={redirectLink}
-                className="cursor-pointer hover:underline transition hover:scale-96 w-full p-2 rounded-full"
+                className="bg-red-100 cursor-pointer hover:underline transition hover:scale-96 w-full p-2 rounded-full border border-red-800 text-red-950 text-lg text-center"
               >
                 {redirectTxt}
               </ Link>
