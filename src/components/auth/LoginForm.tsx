@@ -2,30 +2,45 @@ import { FormLabel } from "../form/formLabel";
 import { FormInputControl } from "../form/formInput";
 import { FormCancelButton, FormSubmitButton } from "../form/formAction";
 import { useForm } from "react-hook-form";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 
 import { LoginDTO, type ICredentials } from "../../pages/auth/auth.contract";
 import { zodResolver } from "@hookform/resolvers/zod";
-// import Cookies from "js-cookie"
+import axiosInstance from "../../assets/config/axios.config";
+import { toast } from "sonner"; 
+import Cookies from "js-cookie"
 
 export default function LoginForm() {
-  const { control, handleSubmit, formState: {errors} } = useForm({
+  const { control, handleSubmit, formState: {errors, isSubmitting} } = useForm({
   defaultValues: {email: "", password: ""},
   resolver: zodResolver(LoginDTO)
 });
 
-  const submitForm = (credentials: ICredentials) => {
-    console.log("Submit Event", credentials)
-      // data storage in client side token
-      // webstorage => cookie, lcalStorage,   
+const navigate = useNavigate()
 
-      // Cookies.set("token", "", {
-      //   expires: 1,   // 1-day duration
-      //   secure: true,
-      //   sameSite: "lax"
-      // })
-      // Cookies.remove("name")
+  const submitForm = async (credentials: ICredentials) => {
+    try{
+      const response = await axiosInstance.post("auth/login", credentials);
+      Cookies.set("token", response.data.data, {
+        expires: 1, secure: true, sameSite: "lax"
+      })
+      const loggedInUser = await axiosInstance.get('auth/me')
+      
+      toast.success("Welcome to User Panel, "+loggedInUser.data.name)
+      navigate("/"+loggedInUser.data.role)
+    // url: http://localhost:9020/api/v1/
+    // method: post
+    // payload: {email:"", password: ""}
+    // headers: {"Content Type"}
+    }
+    catch {
+      // console.log(exception)
+      toast.error("Sorry! Could not login now!!!!", {
+        description: "There was some problem while logging you in at this moment, try again."
+      })
+    }
   }
+    
 
   console.log(errors)
 
@@ -59,8 +74,8 @@ export default function LoginForm() {
       </div>
 
       <div className="flex flex-col md:flex-row w-full gap-5 items-center">
-        <FormCancelButton label="Reset" />
-        <FormSubmitButton label="Login" />
+        <FormCancelButton disabled={isSubmitting} label="Reset" />
+        <FormSubmitButton disabled={isSubmitting} label="Login" />
       </div>
     </form>
   </>);

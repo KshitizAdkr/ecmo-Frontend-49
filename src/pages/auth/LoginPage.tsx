@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useOutletContext } from "react-router";
 import LoginForm from "../../components/auth/LoginForm"; 
-import { type IOutletContext } from "../layout/layout.conract";
+import { type IOutletContext } from "../layout/layout.contract";
 export default function LoginPage() {
   const outletContext = useOutletContext<IOutletContext>();
 
