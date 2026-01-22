@@ -39,3 +39,46 @@
           </div>
         </div>
       </section> */}
+
+//<table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                    <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Image</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">URL</th>
+                        <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Actions</th>
+                    </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-100">
+                    {/* Mock Data Row */}
+                    <tr>
+                        <td className="px-6 py-4 whitespace-nowrap">Summer Sale</td>
+                        <td className="px-6 py-4">
+                            <img src="https://via.placeholder.com/40" alt="Banner" className="w-10 h-10 rounded object-cover" />
+                        </td>
+                        <td className="px-6 py-4">
+                            <span className="inline-block px-2 py-1 text-xs font-semibold rounded bg-green-100 text-green-800">Active</span>
+                        </td>
+                        <td className="px-6 py-4 text-blue-600 underline">https://example.com/summer</td>
+                        <td className="px-6 py-4 flex items-center justify-center gap-2">
+                            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 hover:bg-blue-200 text-blue-600">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                                    <path d="M15.232 5.232l3.536 3.536M9 11l6 6M3 21h6v-6H3v6z" />
+                                </svg>
+                            </button>
+                            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-yellow-100 hover:bg-yellow-200 text-yellow-600">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                                    <path d="M15 12H9m12 0A9 9 0 11 3 12a9 9 0 0118 0z" />
+                                </svg>
+                            </button>
+                            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-red-100 hover:bg-red-200 text-red-600">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                                    <path d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </td>
+                    </tr>
+                    {/* End Mock Data Row */}
+                </tbody>
+            </table>

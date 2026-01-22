@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import AuthContext from "../AuthContext";
 import type { ICredentials, IUser } from "../../pages/auth/auth.contract";
-import axiosInstance from "../../assets/config/axios.config";
+import axiosInstance from "../../config/axios.config";
 import Cookies from "js-cookie"
 
 export default function AuthProvider({children}: Readonly<{children: ReactNode}>){
@@ -33,6 +33,11 @@ export default function AuthProvider({children}: Readonly<{children: ReactNode}>
             setLoading(false)
         }
     }
+
+    const logout = () : void => {
+        Cookies.remove("token")
+        setLoggedInUser(undefined);
+    }
     
     useEffect(() => {
         getLoggedInUser()
@@ -44,7 +49,8 @@ export default function AuthProvider({children}: Readonly<{children: ReactNode}>
         <AuthContext.Provider value={{
             login,
             getLoggedInUser,
-            loggedInUser
+            loggedInUser,
+            logout
         }}>
         {children}
         </AuthContext.Provider>

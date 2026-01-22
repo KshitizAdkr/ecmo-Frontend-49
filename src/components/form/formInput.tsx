@@ -93,3 +93,21 @@ export const EmailInputControl = ({name, placeholder, handler}: Readonly<IGenera
         </>
     )
 }
+
+export const SelectInput = ({name, type, control, handler}: Readonly<IFormInputProps>) => {
+    const{field} = useController({
+        name: name,
+        control: control,
+    })
+    return(
+        <>
+            <input 
+                type= {type}  
+                {...handler(name)}
+                placeholder= {placeholder}
+                {...field} 
+                className="w-full p-2 rounded-lg border border-gray-600"
+            />
+        </>
+    );
+};

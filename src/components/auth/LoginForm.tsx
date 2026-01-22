@@ -4,11 +4,10 @@ import { FormCancelButton, FormSubmitButton } from "../form/formAction";
 import { useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router";
 
-import { LoginDTO, type ICredentials } from "../../pages/auth/auth.contract";
+import { LoginDTO, type ICredentials, type IUser } from "../../pages/auth/auth.contract";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axiosInstance from "../../assets/config/axios.config";
 import { toast } from "sonner"; 
-import Cookies from "js-cookie"
+import { useAuth } from "../../hooks/auth";
 
 export default function LoginForm() {
   const { control, handleSubmit, formState: {errors, isSubmitting} } = useForm({
@@ -16,33 +15,30 @@ export default function LoginForm() {
   resolver: zodResolver(LoginDTO)
 });
 
+const {login, getLoggedInUser} = useAuth()
+
 const navigate = useNavigate()
 
   const submitForm = async (credentials: ICredentials) => {
     try{
-      const response = await axiosInstance.post("auth/login", credentials);
-      Cookies.set("token", response.data.data, {
-        expires: 1, secure: true, sameSite: "lax"
-      })
-      const loggedInUser = await axiosInstance.get('auth/me')
+      await login(credentials)
+      const loggedInUser= await getLoggedInUser() as unknown as IUser;
       
-      toast.success("Welcome to User Panel, "+loggedInUser.data.name)
-      navigate("/"+loggedInUser.data.role)
+      toast.success("Welcome to User Panel, "+loggedInUser.name)
+      navigate("/"+loggedInUser.role)
     // url: http://localhost:9020/api/v1/
     // method: post
     // payload: {email:"", password: ""}
     // headers: {"Content Type"}
     }
     catch {
-      // console.log(exception)
       toast.error("Sorry! Could not login now!!!!", {
         description: "There was some problem while logging you in at this moment, try again."
       })
     }
   }
-    
 
-  console.log(errors)
+  // console.log(errors)
 
   return (
     <>

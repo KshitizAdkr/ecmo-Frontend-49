@@ -1,4 +1,6 @@
-export const UserHeader = ({loggedInUser}: Readonly) => {
+import type { IUser } from "../../pages/auth/auth.contract"
+
+export const UserHeader = ({loggedInUser}: Readonly<{loggedInUser: IUser}>) => {
   return(<>
     <header className="h-20 bg-gray-900 w-full text-white">
         <div className="flex items-center justify-between h-full px-8">
