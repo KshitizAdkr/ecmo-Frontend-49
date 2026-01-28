@@ -10,6 +10,7 @@ import { toast } from "sonner";
 export default function UserLayout() {
   const { loggedInUser } = useAuth();
   const navigate = useNavigate();
+  // const [showSidebar, setShowSidebar]
 
   useEffect(() => {
     console.log(!loggedInUser)
