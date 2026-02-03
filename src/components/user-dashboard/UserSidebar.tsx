@@ -1,12 +1,12 @@
 import { FaCog, FaImage, FaPowerOff, FaShoppingBag, FaShoppingCart, FaSitemap, FaUsers } from "react-icons/fa";
-import type { IUser } from "../../pages/auth/auth.contract";
 import { NavLink, useNavigate } from "react-router";  
 import { FaB, FaMessage } from "react-icons/fa6";
 import type { BaseSyntheticEvent } from "react";
 import { useAuth } from "../../hooks/auth";
 import { toast } from "sonner";
+import type { IUserLayoutProps } from "./UserHeader";
 
-export const UserSidebar = ({loggedInUser}: Readonly<{loggedInUser: IUser}>) => {
+export const UserSidebar = ({loggedInUser, showSidebar}: Readonly<IUserLayoutProps>) => {
     const navigate = useNavigate();
     const {logout}= useAuth()
     const handleLogout = (e: BaseSyntheticEvent) => {
@@ -16,14 +16,14 @@ export const UserSidebar = ({loggedInUser}: Readonly<{loggedInUser: IUser}>) => 
       navigate("/")
     }
   return (
-    <aside className="bg-gray-800 text-white w-100">
+    <aside className={`bg-gray-800 text-white ${showSidebar? 'w-100' : 'w-20'}`}>
       <nav className="flex flex-col h-full py-8 px-5 w-56 justify-between">
         <div>
           <ul className="space-y-3">
             <li>
               <NavLink
                 to={loggedInUser && `/${loggedInUser.role}`}
-                className="flex gap-3 items-center px-3 py-2 rounded-lg hover:bg-gray-700 transition font-medium">
+                className={`flex ${showSidebar? "gap-3 hover:bg-gray-700" : "gap-7"} items-center px-3 py-2 rounded-lg transition font-medium`}>
                 <FaCog className="text-green-400 size-5  " />
                 Dashboard
               </NavLink>
@@ -33,7 +33,7 @@ export const UserSidebar = ({loggedInUser}: Readonly<{loggedInUser: IUser}>) => 
                 loggedInUser && loggedInUser.role === 'admin' ? <li>
                 <NavLink
                  to={loggedInUser && `/${loggedInUser.role}/banners`}
-                className="flex gap-3 items-center px-3 py-2 rounded-lg hover:bg-gray-700 transition font-medium" >
+                className={`flex ${showSidebar? "gap-3 hover:bg-gray-700" : "gap-7"} items-center px-3 py-2 rounded-lg transition font-medium`}>
                   <FaB className="text-green-400 size-5  "/>
                      Banners
                   </ NavLink>
@@ -44,7 +44,7 @@ export const UserSidebar = ({loggedInUser}: Readonly<{loggedInUser: IUser}>) => 
                 loggedInUser && (loggedInUser.role === 'admin' || loggedInUser.role === 'seller')? <li>
                 <NavLink
                  to={loggedInUser && `/${loggedInUser.role}/brands`}
-                className="flex gap-3 items-center px-3 py-2 rounded-lg hover:bg-gray-700 transition font-medium" >
+                className={`flex ${showSidebar? "gap-3 hover:bg-gray-700" : "gap-7"} items-center px-3 py-2 rounded-lg transition font-medium`} >
                   <FaImage className="text-green-400 size-5  "/>
                     Brand
                 </ NavLink>
@@ -55,7 +55,7 @@ export const UserSidebar = ({loggedInUser}: Readonly<{loggedInUser: IUser}>) => 
                 loggedInUser && (loggedInUser.role === 'admin' || loggedInUser.role === 'seller') ? <li>
                 <NavLink
                  to={loggedInUser && `/${loggedInUser.role}/categories`}
-                className="flex gap-3 items-center px-3 py-2 rounded-lg hover:bg-gray-700 transition font-medium" >
+                className={`flex ${showSidebar? "gap-3 hover:bg-gray-700" : "gap-7"} items-center px-3 py-2 rounded-lg transition font-medium`} >
                   <FaSitemap className="text-green-400 size-5  "/>
                      Categories
                   </ NavLink>
@@ -64,7 +64,7 @@ export const UserSidebar = ({loggedInUser}: Readonly<{loggedInUser: IUser}>) => 
               <li>
                 <NavLink
                  to={loggedInUser && `/${loggedInUser.role}/users`}
-                className="flex gap-3 items-center px-3 py-2 rounded-lg hover:bg-gray-700 transition font-medium" >
+                className={`flex ${showSidebar? "gap-3 hover:bg-gray-700" : "gap-7"} items-center px-3 py-2 rounded-lg transition font-medium`} >
                   <FaUsers className="text-green-400 size-5  "/>
                      Userse
                   </ NavLink>
@@ -74,7 +74,7 @@ export const UserSidebar = ({loggedInUser}: Readonly<{loggedInUser: IUser}>) => 
                 loggedInUser && (loggedInUser.role === 'admin' || loggedInUser.role === 'seller')? <li>
                 <NavLink
                  to={loggedInUser && `/${loggedInUser.role}/products`}
-                className="flex gap-3 items-center px-3 py-2 rounded-lg hover:bg-gray-700 transition font-medium" >
+                className={`flex ${showSidebar? "gap-3 hover:bg-gray-700" : "gap-7"} items-center px-3 py-2 rounded-lg transition font-medium`} >
                   <FaShoppingBag className="text-green-400 size-5  "/>
                     Products
                 </ NavLink>
@@ -84,7 +84,7 @@ export const UserSidebar = ({loggedInUser}: Readonly<{loggedInUser: IUser}>) => 
                 <li>
                 <NavLink
                  to={loggedInUser && `/${loggedInUser.role}/orders`}
-                className="flex gap-3 items-center px-3 py-2 rounded-lg hover:bg-gray-700 transition font-medium" >
+                className={`flex ${showSidebar? "gap-3 hover:bg-gray-700" : "gap-7"} items-center px-3 py-2 rounded-lg transition font-medium`} >
                   <FaShoppingCart className="text-green-400 size-5  "/>
                     Orders
                 </ NavLink>
@@ -93,7 +93,7 @@ export const UserSidebar = ({loggedInUser}: Readonly<{loggedInUser: IUser}>) => 
                 <li>
                 <NavLink
                  to={loggedInUser && `/${loggedInUser.role}/messages`}
-                className="flex gap-3 items-center px-3 py-2 rounded-lg hover:bg-gray-700 transition font-medium" >
+                className={`flex ${showSidebar? "gap-3 hover:bg-gray-700" : "gap-7"} items-center px-3 py-2 rounded-lg transition font-medium`} >
                   <FaMessage className="text-green-400 size-5  "/>
                     Messages
                 </ NavLink>

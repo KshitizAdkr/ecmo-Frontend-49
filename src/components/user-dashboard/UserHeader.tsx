@@ -1,14 +1,27 @@
+import type { Dispatch, SetStateAction } from "react"
 import type { IUser } from "../../pages/auth/auth.contract"
+import { FaBars} from "react-icons/fa"
+import { FaBarsStaggered } from "react-icons/fa6"
 
-export const UserHeader = ({loggedInUser}: Readonly<{loggedInUser: IUser}>) => {
+export interface IUserLayoutProps {
+  loggedInUser: IUser,
+  setShowSidebar: Dispatch<SetStateAction<boolean>>,
+  showSidebar: boolean
+}
+
+export const UserHeader = ({loggedInUser, showSidebar, setShowSidebar}: Readonly<IUserLayoutProps>) => {
   return(<>
     <header className="h-20 bg-gray-900 w-full text-white">
         <div className="flex items-center justify-between h-full px-8">
-          {/* Left: Title */}
           <div className="flex items-center gap-4">
             <span className="text-2xl font-bold tracking-tight text-green-400">
               POS Admin
             </span>
+          <button className="hover:cursor-pointer" onClick={() => {
+            setShowSidebar(!showSidebar)
+          }} >
+            { showSidebar ? <FaBars />: <FaBarsStaggered /> }
+          </button>
           </div>
 
           {/* Right: User Info */}

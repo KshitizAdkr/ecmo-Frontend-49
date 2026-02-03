@@ -1,11 +1,13 @@
-import { FaChevronLeft, FaChevronRight, FaEye, FaPen, FaTrash } from "react-icons/fa";
+// import { FaChevronLeft, FaChevronRight, FaEye, FaPen, FaTrash } from "react-icons/fa";
 import { TableHeader } from "../../components/ui/TableHeader"; 
 import { RowSkeleton } from "../../components/ui/table/TableSkeleton";
-import { useEffect, useState, type BaseSyntheticEvent } from "react";
+import { useEffect, useState } from "react";
 import type { IBanner } from "./banner.contract";
 import { toast } from "sonner";
 import axiosInstance from "../../config/axios.config";
 import type { IPagination, IResponse } from "../../common/GlobalType";
+import { TablePagination } from "../../components/ui/table/TablePagination";
+import { RowActions } from "../../components/ui/table/RowAction";
 
 
 
@@ -13,20 +15,20 @@ export default function BannerListPage() {
     const [loading, setLoading] = useState<boolean>(true)
     const [banners, setBanners] = useState<Array<IBanner>>([])
     const [pagination, setPagination] = useState<IPagination>({
-        limit: 1,
+        limit: 20,
         page: 1,
         total: 0,
         totalNoOfpages: 1,
     })
 
-    const getBannerList = async (page = 1, limit = 1, search = '') => {
+    const getBannerList = async ({page = 1, limit = 20, search = ''}) => {
         setLoading(true)
         try {
             const response: IResponse<IBanner> = await axiosInstance.get("/banner", {
                 params: {
                     page: page,
                     limit: limit,
-                    search: search
+                    q: search
                 }
             })
             setBanners(response.data)
@@ -39,24 +41,39 @@ export default function BannerListPage() {
     }
 
     useEffect(() => {
-        getBannerList(1, 1, '');
+        getBannerList({ limit: 20, page: 1, search: '' });
     }, [])
 
+      const onDeleteConfirm = async (id: string) => {
+        try {
+            setLoading(true)
+            await axiosInstance.delete("/banner/" + id)
+            toast.success("Banner deleted successfully")
+            await getBannerList({ limit: 20, page: 1, search: '' })
+        } catch {
+            toast.error("Error deleting Banner", {
+                description: "There was some issue while deleting banner please try again once"
+            })
+        } finally {
+            setLoading(false)
+        }
+    }
+
     return (<>
-        <section className="w-full p-5 bg-white rounded-lg shadow-md">
+         <section className="w-full p-5 bg-white rounded-lg shadow-md">
             {/* Header row: Title, CTA and Search */}
-            <TableHeader title="Banner" showSearch={true} btnTxt="+ Add Banner" btnUrl={'/admin/banner/create'} />
+            <TableHeader title="Banner" getSearchResult={getBannerList} showSearch={true} btnText="+ Add Banner" btnUrl={'/admin/banner/create'} />
 
             {/* Table */}
             <div className="overflow-x-auto">
                 <table className="min-w-full text-left border border-gray-200 rounded-tl-lg rounded-tr-lg overflow-hidden">
                     <thead className="bg-stone-900/75">
                         <tr>
-                            <th className="px-4 py-3 font-medium text-gray-100">Title</th>
-                            <th className="px-4 py-3 font-medium text-gray-100">Thumbnail</th>
-                            <th className="px-4 py-3 font-medium text-gray-100">Status</th>
-                            <th className="px-4 py-3 font-medium text-gray-100">URL</th>
-                            <th className="px-4 py-3 font-medium text-gray-100">Actions</th>
+                            <th className="text-center px-4 py-3 font-medium text-gray-100">Title</th>
+                            <th className="text-center px-4 py-3 font-medium text-gray-100">Thumbnail</th>
+                            <th className="text-center px-4 py-3 font-medium text-gray-100">Status</th>
+                            <th className="text-center px-4 py-3 font-medium text-gray-100">URL</th>
+                            <th className="text-center px-4 py-3 font-medium text-gray-100">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -64,25 +81,26 @@ export default function BannerListPage() {
                             loading
                                 ? <>
                                     <RowSkeleton rows={5} columns={5} />
+
                                 </>
                                 : (
                                     banners && banners.length ? (
                                         banners.map((i: IBanner, idx) => (
                                             <tr key={idx} className="border-b boarder-b-gray-200 last:border hover:bg-stone-100">
-                                                <td className="px-4 py-3 whitespace-nowrap text-gray-900">{i.title}</td>
+                                                <td className="text-center px-4 py-3 whitespace-nowrap text-gray-900">{i.title}</td>
                                                 <td className="px-4 py-3">
                                                     <img
                                                         src={i.image.url}
                                                         alt={i.title}
-                                                        className="w-25 rounded-md object-cover "
+                                                        className="w-20 rounded-md object-cover mx-auto"
                                                     />
                                                 </td>
-                                                <td className="px-4 py-3">
+                                                <td className="text-center px-4 py-3">
                                                     <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${i.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
                                                         {i.status === 'active' ? "Published" : "Un-Published"}
                                                     </span>
                                                 </td>
-                                                <td className="px-4 py-3">
+                                                <td className="text-center px-4 py-3">
                                                     <a
                                                         href={i.url}
                                                         target="_banner"
@@ -92,27 +110,15 @@ export default function BannerListPage() {
                                                     </a>
                                                 </td>
                                                 <td className="px-4 py-3">
-                                                    <div className="flex items-center gap-2">
-                                                        <button
-                                                            title="View"
-                                                            className="flex items-center justify-center size-10 bg-emerald-900 hover:bg-emerald-800 text-emerald-100 rounded-full transition"
-                                                        >
-                                                            <FaEye className="size-4" />
-                                                        </button>
-                                                        <button
-                                                            title="Edit"
-                                                            className="flex items-center justify-center size-10 bg-blue-900 hover:bg-blue-800 text-blue-100 rounded-full transition"
-                                                        >
-                                                            <FaPen className="size-4" />
-                                                        </button>
-                                                        <button
-                                                            title="Delete"
-                                                            className="flex items-center justify-center size-10 bg-red-900 hover:bg-red-800 text-red-100 rounded-full transition"
-                                                        >
-                                                            <FaTrash className="size-4" />
-                                                        </button>
+                                                    <div className="flex justify-center items-center gap-3">
+                                                        <RowActions
+                                                            editUrl={"/admin/banner/" + i._id}
+                                                            rowId={i._id}
+                                                            onDeleteConfirm={onDeleteConfirm}
+                                                        />
                                                     </div>
                                                 </td>
+
                                             </tr>
                                         ))
                                     ) : <tr className="border-b boarder-b-gray-200 last:border hover:bg-stone-100">
@@ -127,59 +133,13 @@ export default function BannerListPage() {
             </div>
             {/* Pagination */}
             {
-                loading ? <></> : (
-                    banners && <div className="flex justify-end items-center mt-6">
-                        <div className="flex items-center gap-1">
-                            <button className={`size-8 
-                                flex items-center justify-center
-                                rounded-full       
-                                ${pagination && pagination.page === 1 ? `bg-gray-400 text-gray-300 hover:cursor-not-allowed` : ` bg-white text-gray-600  hover:bg-gray-100 `
-                                }
-                                `}
-                                onClick={async (e: BaseSyntheticEvent) => {
-                                    e.preventDefault()
-                                    if (pagination.page > 1) {
-                                        await getBannerList(pagination.page - 1, pagination.limit, '')
-                                    }
-                                }}>
-                                <FaChevronLeft className="size-4" />
-                            </button>
-
-                            {
-                                [1, 2, 3].map((pageNum) => (
-                                    <button key={pageNum} className={`
-                                        size-8 flex items-center justify-center rounded-full
-                                        hover:cursor-pointer
-                                        ${pagination.page === pageNum ? 'bg-blue-600 text-white font-bold' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}
-                                    `}
-                                        onClick={async (e: BaseSyntheticEvent) => {
-                                            e.preventDefault()
-                                            if (pagination.page !== pageNum) {
-                                                await getBannerList(pageNum, pagination.limit, '')
-                                            }
-                                        }}>
-                                        {pageNum}
-                                    </button>
-                                ))
-                            }
-                            <button className={`size-8 
-                                flex items-center justify-center
-                                rounded-full       
-                                ${pagination && pagination.page === 3
-                                    ? `bg-gray-400 text-gray-300 hover:cursor-not-allowed` : ` bg-white text-gray-600  hover:bg-gray-100 `
-                                } 
-                                `}
-                                onClick={async (e: BaseSyntheticEvent) => {
-                                    e.preventDefault()
-                                    if (pagination.page < 3) {
-                                        await getBannerList(pagination.page + 1, pagination.limit, '')
-                                    }
-                                }}
-                            >
-                                <FaChevronRight className="size-4" />
-                            </button>
-                        </div>
-                    </div>
+                loading ? null : (
+                    banners && (
+                        <TablePagination
+                            getDataAction={({ limit, page, search }) => getBannerList({ limit, page, search })}
+                            pagination={pagination}
+                        />
+                    )
                 )
             }
         </section>
